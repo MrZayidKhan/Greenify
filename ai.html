@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFF1EE;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            background-image: url('header-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            letter-spacing: 1px;
+
+        }
+        .points-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #388e3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .points-counter:hover .tips {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .tips {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            top: 40px;
+            right: 0;
+            width: 200px;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background: #388e3c;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            font-size: 1.2rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #ffeb3b;
+            color: #333;
+            transform: scale(1.05);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 3rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #388e3c;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+        .container form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .container label {
+            font-weight: bold;
+        }
+        .container input, .container textarea {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .container button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .container button:hover {
+            background-color: #388e3c;
+        }
+        .chat-box {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+        .chat-box p {
+            padding: 0.8rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            background-color: #e0e0e0;
+            color: #333; 
+        }
+        .user-message {
+            background-color: #f5f5f5;
+            color: #333; 
+            text-align: left;
+        }
+        .assistant-message {
+            background-color: #f5f5f5;
+            color: #333; 
+            text-align: right;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            background: #388e3c;
+            color: white;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        @media (max-width: 768px) {
+    body {
+        font-size: 16px; 
+    }
+
+    header h1 {
+        font-size: 2.5rem; 
+    }
+
+    .points-counter {
+        font-size: 1rem;
+        padding: 8px 15px;
+        top: 5px;
+        right: 5px;
+    }
+
+    nav {
+        flex-direction: column;
+        padding: 1rem 0;
+    }
+
+    nav a {
+        margin: 0.5rem 0;
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .container {
+        margin: 2rem auto;
+        padding: 2rem;
+    }
+
+    .container h2 {
+        font-size: 2rem;
+    }
+
+    .container input, .container textarea {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .container button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .chat-box {
+        max-height: 300px;
+        padding: 0.8rem;
+    }
+
+    footer {
+        padding: 1rem 0;
+    }
+
+    footer p {
+        font-size: 0.9rem;
+    }
+}
+
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px; 
+    }
+
+    header h1 {
+        font-size: 2rem; 
+    }
+
+    .points-counter {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+
+    nav a {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .container {
+        margin: 1.5rem auto;
+        padding: 1.5rem;
+    }
+
+    .container h2 {
+        font-size: 1.8rem;
+    }
+
+    .container input, .container textarea {
+        font-size: 0.9rem;
+    }
+
+    .container button {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .chat-box {
+        max-height: 250px;
+        padding: 0.6rem;
+    }
+
+    footer p {
+        font-size: 0.8rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AI Assistant</h1>
+        <div class="points-counter">
+            800 Points
+            <div class="tips">
+                <p>Recycle more items to earn points!</p>
+                <p>Schedule pickups to gain extra points!</p>
+                <p>Participate in challenges and get rewarded!</p>
+            </div>
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="track.html">Track E-Waste</a>
+        <a href="ai.html">AI Assistant</a>
+        <a href="schedule.html">Schedule Pickup</a>
+        <a href="marketplace.html">Marketplace</a>
+        <a href="incentives.html">Incentives</a>
+    </nav>
+
+    <div class="container">
+        <h2>Chat with Our AI Assistant</h2>
+        <form id="chatForm">
+            <label for="question">Ask a Question</label>
+            <textarea id="question" name="question" rows="4" required></textarea>
+            <button type="submit">Send</button>
+        </form>
+        <div class="chat-box" id="chatBox"></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 E-Waste Management System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const question = document.getElementById('question').value;
+            if (question.trim() !== "") {
+                addMessage(question, 'user');
+                getAIResponse(question);
+                document.getElementById('question').value = '';
+            }
+        });
+
+        function addMessage(text, sender) {
+            const chatBox = document.getElementById('chatBox');
+            const message = document.createElement('p');
+            message.classList.add(sender === 'user' ? 'user-message' : 'assistant-message');
+            message.textContent = text;
+            chatBox.appendChild(message);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function getAIResponse(question) {
+            let response = "Sorry, I didn't understand that.";
+
+            if (question.toLowerCase().includes("e-waste")) {
+                response = "E-waste includes any discarded electronic devices like old phones, computers, or televisions. Would you like to learn how to recycle them?";
+            } else if (question.toLowerCase().includes("schedule")) {
+                response = "You can schedule a pickup for your e-waste directly from the Schedule Pickup page on the site!";
+            } else if (question.toLowerCase().includes("marketplace")) {
+                response = "In our Marketplace, you can find refurbished electronics or even sell your old items. Visit the Marketplace page to get started!";
+            } else if (question.toLowerCase().includes("recycling")) {
+                response = "Recycling e-waste properly helps reduce pollution and conserve resources. I can guide you on how to recycle your electronics responsibly.";
+            } else if (question.toLowerCase().includes("reward")) {
+                response = "Did you know you can earn rewards for managing your e-waste? Check out our Incentives page to find out more!";
+            } else if (question.toLowerCase().includes("pickup")) {
+                response = "Our pickup service is easy to use! Just go to the Schedule Pickup page and book your appointment today.";
+            } else if (question.toLowerCase().includes("benefits")) {
+                response = "Recycling e-waste saves energy, reduces landfill waste, and helps preserve valuable materials. Want to know how you can start recycling today?";
+            } else if (question.toLowerCase().includes("how to recycle")) {
+                response = "You can recycle your e-waste by visiting designated e-waste recycling centers or by using our easy-to-schedule pickup service. Need more details?";
+            }
+
+            setTimeout(function() {
+                addMessage(response, 'assistant');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
